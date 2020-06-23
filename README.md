@@ -18,7 +18,7 @@ Here's how you install the Azure Cli with one line of Dockerfile code:
 
 `RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash`
 
-See [Dockerfile](Dockerfile) for full code.
+See [Dockerfile](src/net/Dockerfile) for full code.
 
 > This example is for .NET and Linux only.  If you want to see this working in other langs or Windows, then please file an issue.
 
@@ -33,7 +33,7 @@ volumes:
    - "${USERPROFILE}/.azure:/root/.azure"
 ```
 
-See [docker-compose.yml](docker-compose.yml) for full code.
+See [docker-compose.yml](src/net/docker-compose.yml) for full code.
 
 
 ## docker-compose up --build
