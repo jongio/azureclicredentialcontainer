@@ -1,0 +1,10 @@
+version: '3.4'
+
+services:
+  azureclicredentialcontainer:
+    image: azureclicredentialcontainer
+    volumes: 
+      - "${USERPROFILE}/.azure:/root/.azure"
+    build:
+      context: .
+      dockerfile: Dockerfile
