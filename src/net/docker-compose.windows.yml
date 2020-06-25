@@ -4,7 +4,7 @@ services:
   azureclicredentialcontainer:
     image: azureclicredentialcontainer
     volumes: 
-      - "${HOME}/.azure:/root/.azure"
+      - "${USERPROFILE}/.azure:/root/.azure"
     build:
       context: .
       dockerfile: Dockerfile

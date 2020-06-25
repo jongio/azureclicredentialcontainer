@@ -38,4 +38,10 @@ See [docker-compose.yml](src/net/docker-compose.yml) for full code.
 
 ## docker-compose up --build
 
-Then when you run `docker-compose up --build` your `AzureCliCredential` code will now work.
+### Linux
+Run `docker-compose up --build` your `AzureCliCredential` code will now work.
+
+### Windows
+Windows handles the user's home directory differently than Linux, so you need to use ${USERPROFILE} instead of ${HOME} in your docker-compose call.
+
+Run `docker-compose -f docker-compose.windows.yml up --build` your `AzureCliCredential` code will now work.
