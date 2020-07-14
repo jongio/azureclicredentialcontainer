@@ -1,6 +1,6 @@
 # How to use AzureCliCredential in a Container
 
-[AzureCliCredential](https://github.com/Azure/azure-sdk-for-net/blob/master/sdk/identity/Azure.Identity/src/AzureCliCredential.cs) is a new credential type in [Azure.Identity](https://github.com/Azure/azure-sdk-for-net/tree/master/sdk/identity/Azure.Identity).  It allows your code to use the [Azure Cli](https://aka.ms/azcliget) to generate bearer tokens to be used by other Azure SDK clients.
+[AzureCliCredential](https://github.com/Azure/azure-sdk-for-net/blob/master/sdk/identity/Azure.Identity/src/AzureCliCredential.cs) is a new credential type in [Azure.Identity](https://github.com/Azure/azure-sdk-for-net/tree/master/sdk/identity/Azure.Identity).  It allows your code to use the [Azure CLI](https://aka.ms/azcliget) to generate bearer tokens to be used by other Azure SDK clients.
 
 For example, the following code news up an `AzureCliCredential` and passes it to the Azure Key Vault `KeyClient`, which in turn will call the `GetToken` method on the `AzureCliCredential` class when the first method is called that requires an AAD token.
 
@@ -10,11 +10,15 @@ var client = new KeyClient(new Uri("https://jongkv.vault.azure.net"), cred);
 var key = await client.GetKeyAsync("key1");
 ```
 
-If you want to run this code in a container, then you need to install the Azure Cli and mount a volume to your `${HOME}/.azure` folder for Linux and `${USERPROFILE}/.azure` folder for Windows.
+If you want to run this code in a container, then you need to install the Azure CLI and mount a volume to your `${HOME}/.azure` folder for Linux and `${USERPROFILE}/.azure` folder for Windows.
 
+## Azure CLI Setup
+
+1. Install the [Azure CLI](https://aka.ms/azcliget)
+2. Run `az login` in the same host OS that you will use for development.  So, if you use WSL2, then run this in a WSL2 terminal. If you use Git Bash, then run this there. The Azure CLI will cache tokens locally in `${HOME}/.azure` that will be used by AzureCliCredential.
 
 ## Dockerfile
-Here's how you install the Azure Cli with one line of Dockerfile code:
+Here's how you install the Azure CLI with one line of Dockerfile code:
 
 `RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash`
 
@@ -24,7 +28,7 @@ See [Dockerfile](src/net/Dockerfile) for full code.
 
 ## docker-compose.yml
 
-If you only install the Azure Cli, you will be required to `az login` in the container.  To have the container honor your host machines `az login`, then you need to expose the `.azure` folder on your host to your container.
+If you only install the Azure CLI, you will be required to `az login` in the container.  To have the container honor your host machines `az login`, then you need to expose the `.azure` folder on your host to your container.
 
 Here's how to do that in `docker-compose.yml`
 
@@ -56,7 +60,11 @@ Run `docker-compose -f docker-compose.windows.yml up --build` your `AzureCliCred
 
 ## Running AzureCliCredential in Kubernetes
 
-I'm running Docker Desktop and WSL2. Standard Kubernetes hostPath based volume mounts do not currently work with this setup, so you need to do the following:
+I'm running Docker Desktop and WSL2. The following is for that configuration. If you are using a different setup and can't get this to work, then let me know and I should be able to help you get it all setup.
+
+Standard Kubernetes hostPath based volume mounts do not currently work with Docker Desktop and WSL2, so you need to do the following:
+
+Create a directory in the /mnt/wsl folder to mount to, then mount from ${HOME}/.azure to that folder.  I don't exactly know why this is required, but it works.  Here's more info if you are interested in researching it: [Kubernetes Volumes not correctly mounted with WSL2](https://github.com/docker/for-win/issues/5325#issuecomment-645859528)
 
 ```bash
 mkdir /mnt/wsl/.azure
