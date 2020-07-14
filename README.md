@@ -10,7 +10,7 @@ var client = new KeyClient(new Uri("https://jongkv.vault.azure.net"), cred);
 var key = await client.GetKeyAsync("key1");
 ```
 
-If you want to run this code in a container, then you need to install the Azure Cli and mount a volume to your `${USERPROFILE}/.azure` folder.
+If you want to run this code in a container, then you need to install the Azure Cli and mount a volume to your `${HOME}/.azure` folder for Linux and `${USER_PROFILE}/.azure` folder for Windows.
 
 
 ## Dockerfile
@@ -28,12 +28,19 @@ If you only install the Azure Cli, you will be required to `az login` in the con
 
 Here's how to do that in `docker-compose.yml`
 
+Linux:
 ```
 volumes: 
-   - "${USERPROFILE}/.azure:/root/.azure"
+   - "${HOME}/.azure:/root/.azure"
 ```
 
-See [docker-compose.yml](src/net/docker-compose.yml) for full code.
+Windows:
+```
+volumes: 
+   - "${USER_PROFILE}/.azure:/root/.azure"
+```
+
+See [docker-compose.yml](src/net/docker-compose.yml) for full code Linux, and [docker-compose.windows.yml](src/net/docker-compose.windows.yml) for full code Windows.
 
 
 ## docker-compose up --build
@@ -45,3 +52,33 @@ Run `docker-compose up --build` your `AzureCliCredential` code will now work.
 Windows handles the user's home directory differently than Linux, so you need to use ${USERPROFILE} instead of ${HOME} in your docker-compose call.
 
 Run `docker-compose -f docker-compose.windows.yml up --build` your `AzureCliCredential` code will now work.
+
+
+## Running AzureCliCredential in Kubernetes
+
+I'm running Docker Desktop and WSL2. Standard Kubernetes hostPath based volume mounts do not currently work with this setup, so you need to do the following:
+
+```bash
+mkdir /mnt/wsl/.azure
+sudo mount --bind ${HOME}/.azure /mnt/wsl/.azure
+```
+
+Then in your Kubernetes config file you specify the mount path like this:
+
+```yaml
+volumes:
+   - hostPath:
+      path: /run/desktop/mnt/host/wsl/.azure
+      type: Directory
+      name: cli
+```
+
+You can find the entire file example here: [.k8s/k8s.yml](src/net/.k8s/k8s.yml)
+
+Then run `kubeclt apply -f .k8s` and you will see `key1` outputed to your logs.
+
+You can remove the mount with the following:
+
+```bash
+sudo umount /mnt/wsl/.azure
+```

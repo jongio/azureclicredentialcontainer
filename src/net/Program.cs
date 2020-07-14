@@ -9,23 +9,21 @@ namespace AzureCliCredentialContainer
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            Directory.GetFiles("/root/test").ToList().ForEach(f => Console.WriteLine(f));
-            /*
-                        try
-                        {
-                            var cred = new AzureCliCredential();
-                            var client = new KeyClient(new Uri("https://jongkv.vault.azure.net"), cred);
-                            var key = await client.GetKeyAsync("key1");
-                            Console.WriteLine(key.Value.Name);
+            try
+            {
+                var cred = new AzureCliCredential();
+                var client = new KeyClient(new Uri("https://jongkv.vault.azure.net"), cred);
+                var key = await client.GetKeyAsync("key1");
+                Console.WriteLine(key.Value.Name);
 
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine(ex);
-                        }
-                        */
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
             while (true) { }
         }
     }

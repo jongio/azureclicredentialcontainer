@@ -2,9 +2,9 @@ version: '3.4'
 
 services:
   azureclicredentialcontainer:
-    image: jongio/azureclicredentialcontainer:k8s
+    image: jongio/azureclicredentialcontainer
     volumes: 
-      - "/C/test:/root/test"
+      - "${HOME}/.azure:/root/.azure"
     build:
       context: .
       dockerfile: Dockerfile

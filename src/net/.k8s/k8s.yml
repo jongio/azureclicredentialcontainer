@@ -19,18 +19,18 @@ spec:
         io.kompose.service: azureclicredentialcontainer
     spec:
       containers:
-        - image: jongio/azureclicredentialcontainer:k8s
-          imagePullPolicy: "Never"
+        - image: jongio/azureclicredentialcontainer
+          imagePullPolicy: "IfNotPresent"
           name: azureclicredentialcontainer
           resources: {}
           volumeMounts:
-            - mountPath: /root/test
+            - mountPath: /root/.azure
               name: cli
       restartPolicy: Always
       serviceAccountName: ""
       volumes:
         - hostPath:
-            path: /C/test
+            path: /run/desktop/mnt/host/wsl/.azure
             type: Directory
           name: cli
           
