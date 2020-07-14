@@ -10,7 +10,7 @@ var client = new KeyClient(new Uri("https://jongkv.vault.azure.net"), cred);
 var key = await client.GetKeyAsync("key1");
 ```
 
-If you want to run this code in a container, then you need to install the Azure Cli and mount a volume to your `${HOME}/.azure` folder for Linux and `${USER_PROFILE}/.azure` folder for Windows.
+If you want to run this code in a container, then you need to install the Azure Cli and mount a volume to your `${HOME}/.azure` folder for Linux and `${USERPROFILE}/.azure` folder for Windows.
 
 
 ## Dockerfile
@@ -37,7 +37,7 @@ volumes:
 Windows:
 ```
 volumes: 
-   - "${USER_PROFILE}/.azure:/root/.azure"
+   - "${USERPROFILE}/.azure:/root/.azure"
 ```
 
 See [docker-compose.yml](src/net/docker-compose.yml) for full code Linux, and [docker-compose.windows.yml](src/net/docker-compose.windows.yml) for full code Windows.
