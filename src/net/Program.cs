@@ -11,7 +11,7 @@ namespace AzureCliCredentialContainer
     {
         static void Main(string[] args)
         {
-            Directory.GetFiles("/root/.azure").ToList().ForEach(f => Console.WriteLine(f));
+            Directory.GetFiles("/root/test").ToList().ForEach(f => Console.WriteLine(f));
             /*
                         try
                         {
