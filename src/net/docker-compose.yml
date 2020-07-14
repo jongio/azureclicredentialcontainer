@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   azureclicredentialcontainer:
-    image: azureclicredentialcontainer
+    image: jongio/azureclicredentialcontainer
     volumes: 
       - "${HOME}/.azure:/root/.azure"
     build:
