@@ -13,6 +13,8 @@ FROM build AS publish
 RUN dotnet publish "AzureCliCredentialContainer.csproj" -c Release -o /app/publish
 
 FROM base AS final
+RUN apt-get clean && apt-get update
+RUN apt install curl -y
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 WORKDIR /app
 COPY --from=publish /app/publish .
