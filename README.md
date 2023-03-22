@@ -1,5 +1,8 @@
 # How to use AzureCliCredential in a Container
 
+>> This solution no longer works with latest Azure SDK libraries.  Please see the issue here to follow along with the conversation: https://github.com/Azure/azure-sdk-for-net/issues/19167
+
+
 [AzureCliCredential](https://github.com/Azure/azure-sdk-for-net/blob/master/sdk/identity/Azure.Identity/src/AzureCliCredential.cs) is a new credential type in [Azure.Identity](https://github.com/Azure/azure-sdk-for-net/tree/master/sdk/identity/Azure.Identity).  It allows your code to use the [Azure CLI](https://aka.ms/azcliget) to generate bearer tokens to be used by other Azure SDK clients.
 
 For example, the following code news up an `AzureCliCredential` and passes it to the Azure Key Vault `KeyClient`, which in turn will call the `GetToken` method on the `AzureCliCredential` class when the first method is called that requires an AAD token.
